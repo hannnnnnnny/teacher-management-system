@@ -1,6 +1,9 @@
 spring:
   application:
     name: teacher-management-system
+  web:
+    resources:
+      add-mappings: true
 
 server:
   port: 8080
