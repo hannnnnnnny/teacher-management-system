@@ -62,28 +62,28 @@ public class ManagementService {
     }
 
     private void seed() {
-        add("teachers", map("name", "林樱", "department", "语文组", "phone", "13800000001", "email", "linying@example.com", "status", "在职"));
-        add("teachers", map("name", "周明", "department", "数学组", "phone", "13800000002", "email", "zhouming@example.com", "status", "在职"));
-        add("teachers", map("name", "许晴", "department", "英语组", "phone", "13800000003", "email", "xuqing@example.com", "status", "请假"));
+        add("teachers", map("name", "Emma Lin", "department", "Language Arts", "phone", "13800000001", "email", "emma.lin@example.com", "status", "Active"));
+        add("teachers", map("name", "Michael Zhou", "department", "Mathematics", "phone", "13800000002", "email", "michael.zhou@example.com", "status", "Active"));
+        add("teachers", map("name", "Clara Xu", "department", "English", "phone", "13800000003", "email", "clara.xu@example.com", "status", "On Leave"));
 
-        add("students", map("name", "陈安安", "studentNo", "S2026001", "className", "高一一班", "phone", "13900000001", "status", "正常"));
-        add("students", map("name", "李星河", "studentNo", "S2026002", "className", "高一二班", "phone", "13900000002", "status", "正常"));
-        add("students", map("name", "王若溪", "studentNo", "S2026003", "className", "高二一班", "phone", "13900000003", "status", "正常"));
+        add("students", map("name", "Anna Chen", "studentNo", "S2026001", "className", "Grade 10 Class 1", "phone", "13900000001", "status", "Enrolled"));
+        add("students", map("name", "Leo Li", "studentNo", "S2026002", "className", "Grade 10 Class 2", "phone", "13900000002", "status", "Enrolled"));
+        add("students", map("name", "Iris Wang", "studentNo", "S2026003", "className", "Grade 11 Class 1", "phone", "13900000003", "status", "Enrolled"));
 
-        add("courses", map("name", "语文阅读", "teacher", "林樱", "credit", "3", "room", "A201", "status", "开课"));
-        add("courses", map("name", "数学建模", "teacher", "周明", "credit", "4", "room", "B305", "status", "开课"));
-        add("courses", map("name", "英语口语", "teacher", "许晴", "credit", "2", "room", "C102", "status", "开课"));
+        add("courses", map("name", "Literature Reading", "teacher", "Emma Lin", "credit", "3", "room", "A201", "status", "Open"));
+        add("courses", map("name", "Mathematical Modeling", "teacher", "Michael Zhou", "credit", "4", "room", "B305", "status", "Open"));
+        add("courses", map("name", "English Speaking", "teacher", "Clara Xu", "credit", "2", "room", "C102", "status", "Open"));
 
-        add("classes", map("name", "高一一班", "headTeacher", "林樱", "grade", "高一", "students", "42", "room", "A101"));
-        add("classes", map("name", "高一二班", "headTeacher", "周明", "grade", "高一", "students", "39", "room", "A102"));
-        add("classes", map("name", "高二一班", "headTeacher", "许晴", "grade", "高二", "students", "41", "room", "B201"));
+        add("classes", map("name", "Grade 10 Class 1", "headTeacher", "Emma Lin", "grade", "Grade 10", "students", "42", "room", "A101"));
+        add("classes", map("name", "Grade 10 Class 2", "headTeacher", "Michael Zhou", "grade", "Grade 10", "students", "39", "room", "A102"));
+        add("classes", map("name", "Grade 11 Class 1", "headTeacher", "Clara Xu", "grade", "Grade 11", "students", "41", "room", "B201"));
 
-        add("scores", map("student", "陈安安", "course", "语文阅读", "score", "92", "term", "2026春季", "level", "优秀"));
-        add("scores", map("student", "李星河", "course", "数学建模", "score", "88", "term", "2026春季", "level", "良好"));
-        add("scores", map("student", "王若溪", "course", "英语口语", "score", "95", "term", "2026春季", "level", "优秀"));
+        add("scores", map("student", "Anna Chen", "course", "Literature Reading", "score", "92", "term", "Spring 2026", "level", "Excellent"));
+        add("scores", map("student", "Leo Li", "course", "Mathematical Modeling", "score", "88", "term", "Spring 2026", "level", "Good"));
+        add("scores", map("student", "Iris Wang", "course", "English Speaking", "score", "95", "term", "Spring 2026", "level", "Excellent"));
 
-        add("users", map("username", "admin", "role", "管理员", "name", "系统管理员", "status", "启用"));
-        add("users", map("username", "teacher01", "role", "教师", "name", "林樱", "status", "启用"));
+        add("users", map("username", "admin", "role", "Administrator", "name", "System Admin", "status", "Enabled"));
+        add("users", map("username", "teacher01", "role", "Teacher", "name", "Emma Lin", "status", "Enabled"));
     }
 
     private void add(String module, Map<String, Object> fields) {
@@ -98,4 +98,3 @@ public class ManagementService {
         return map;
     }
 }
-
