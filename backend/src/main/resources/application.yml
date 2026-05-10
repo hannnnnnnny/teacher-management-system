@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: teacher-management-system
+
+server:
+  port: 8080
+

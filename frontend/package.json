@@ -1,0 +1,19 @@
+{
+  "name": "teacher-management-system-frontend",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "vite --host 0.0.0.0",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@vitejs/plugin-vue": "^5.1.4",
+    "axios": "^1.7.7",
+    "element-plus": "^2.8.6",
+    "vite": "^5.4.10",
+    "vue": "^3.5.12"
+  },
+  "devDependencies": {}
+}
+
