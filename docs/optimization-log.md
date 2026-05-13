@@ -12,3 +12,4 @@
 - Commit checkpoint 17: reviewed Teacher Management System quality, data coverage, UI polish, and GitHub readiness.
 - Commit checkpoint 18: reviewed Teacher Management System quality, data coverage, UI polish, and GitHub readiness.
 - Commit checkpoint 19: reviewed Teacher Management System quality, data coverage, UI polish, and GitHub readiness.
+- Commit checkpoint 20: reviewed Teacher Management System quality, data coverage, UI polish, and GitHub readiness.
