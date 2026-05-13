@@ -63,14 +63,14 @@ public class ManagementService {
     }
 
     private void seed() {
-        add("teachers", map("name", "Emma Lin", "department", "Language Arts", "phone", "13800000001", "email", "emma.lin@example.com", "status", "Active"));
-        add("teachers", map("name", "Michael Zhou", "department", "Mathematics", "phone", "13800000002", "email", "michael.zhou@example.com", "status", "Active"));
-        add("teachers", map("name", "Clara Xu", "department", "English", "phone", "13800000003", "email", "clara.xu@example.com", "status", "On Leave"));
-        add("teachers", map("name", "Oliver Reed", "department", "Science", "phone", "13800000004", "email", "oliver.reed@example.com", "status", "Active"));
-        add("teachers", map("name", "Sophia Patel", "department", "Computer Science", "phone", "13800000005", "email", "sophia.patel@example.com", "status", "Active"));
-        add("teachers", map("name", "Daniel Kim", "department", "Physical Education", "phone", "13800000006", "email", "daniel.kim@example.com", "status", "Active"));
-        add("teachers", map("name", "Grace Miller", "department", "Arts", "phone", "13800000007", "email", "grace.miller@example.com", "status", "Active"));
-        add("teachers", map("name", "Henry Brown", "department", "History", "phone", "13800000008", "email", "henry.brown@example.com", "status", "Pending"));
+        add("teachers", map("name", "Emma Lin", "department", "Language Arts", "phone", "13800000001", "email", "emma.lin@example.com", "status", "Active", "salary", "6800"));
+        add("teachers", map("name", "Michael Zhou", "department", "Mathematics", "phone", "13800000002", "email", "michael.zhou@example.com", "status", "Active", "salary", "7200"));
+        add("teachers", map("name", "Clara Xu", "department", "English", "phone", "13800000003", "email", "clara.xu@example.com", "status", "On Leave", "salary", "6600"));
+        add("teachers", map("name", "Oliver Reed", "department", "Science", "phone", "13800000004", "email", "oliver.reed@example.com", "status", "Active", "salary", "7400"));
+        add("teachers", map("name", "Sophia Patel", "department", "Computer Science", "phone", "13800000005", "email", "sophia.patel@example.com", "status", "Active", "salary", "7800"));
+        add("teachers", map("name", "Daniel Kim", "department", "Physical Education", "phone", "13800000006", "email", "daniel.kim@example.com", "status", "Active", "salary", "6200"));
+        add("teachers", map("name", "Grace Miller", "department", "Arts", "phone", "13800000007", "email", "grace.miller@example.com", "status", "Active", "salary", "6100"));
+        add("teachers", map("name", "Henry Brown", "department", "History", "phone", "13800000008", "email", "henry.brown@example.com", "status", "Pending", "salary", "6400"));
 
         add("students", map("name", "Anna Chen", "studentNo", "S2026001", "className", "Grade 10 Class 1", "phone", "13900000001", "status", "Enrolled"));
         add("students", map("name", "Leo Li", "studentNo", "S2026002", "className", "Grade 10 Class 2", "phone", "13900000002", "status", "Enrolled"));
