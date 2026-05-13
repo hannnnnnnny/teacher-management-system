@@ -768,7 +768,7 @@ const payrollRows = computed(() =>
     name: record.fields.name,
     department: record.fields.department,
     status: record.fields.status,
-    salary: salaryByDepartment[record.fields.department] || 6000
+    salary: Number(record.fields.salary || salaryByDepartment[record.fields.department] || 6000)
   }))
 )
 
