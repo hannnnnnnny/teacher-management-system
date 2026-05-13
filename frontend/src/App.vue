@@ -54,11 +54,11 @@
         </div>
 
         <div class="stats-grid">
-          <article v-for="card in statCards" :key="card.key" class="stat-card">
+          <button v-for="card in statCards" :key="card.key" class="stat-card" type="button" @click="setActiveModule(card.key)">
             <span>{{ card.label }}</span>
             <strong>{{ card.value }}</strong>
             <small>{{ card.note }}</small>
-          </article>
+          </button>
         </div>
 
         <div class="content-grid">
@@ -77,7 +77,7 @@
           <section class="panel">
             <div class="section-title">
               <h3>Score Distribution</h3>
-              <span>Excellent rate 67%</span>
+              <span>Excellent rate {{ scoreSummary.excellentRate }}%</span>
             </div>
             <div class="bars">
               <div v-for="bar in scoreBars" :key="bar.label">
@@ -90,13 +90,12 @@
           <section class="panel">
             <div class="section-title">
               <h3>Department Coverage</h3>
-              <span>6 departments</span>
+              <span>{{ departmentSummary.length }} departments</span>
             </div>
             <ul class="todo-list">
-              <li>Language Arts: 3 active teachers</li>
-              <li>Mathematics: 3 active teachers</li>
-              <li>Science and Technology: 4 active teachers</li>
-              <li>Arts and Physical Education: 3 active teachers</li>
+              <li v-for="department in departmentSummary" :key="department.name">
+                {{ department.name }}: {{ department.count }} teacher{{ department.count === 1 ? '' : 's' }}
+              </li>
             </ul>
           </section>
           <section class="panel">
@@ -244,11 +243,14 @@
             <h3>{{ activeConfig.title }}</h3>
             <p>{{ activeConfig.description }}</p>
           </div>
-          <span>{{ filteredRecords.length }} records</span>
+          <div class="section-actions">
+            <span>{{ filteredRecords.length }} records</span>
+            <button class="ghost-button" type="button" @click="exportRecords">Export CSV</button>
+          </div>
         </div>
 
         <div class="table-wrap">
-          <table>
+          <table v-if="filteredRecords.length">
             <thead>
               <tr>
                 <th v-for="field in activeConfig.fields" :key="field.key">{{ field.label }}</th>
@@ -270,6 +272,10 @@
               </tr>
             </tbody>
           </table>
+          <div v-else class="empty-state table-empty">
+            <h3>No records found</h3>
+            <p>Try another keyword or add a new {{ activeConfig.short.toLowerCase() }} record.</p>
+          </div>
         </div>
       </section>
     </main>
@@ -516,18 +522,45 @@ const searchPlaceholder = computed(() => {
 })
 
 const statCards = computed(() => [
-  { key: 'teachers', label: 'Teachers', value: records.teachers.length, note: 'Across 3 departments' },
+  { key: 'teachers', label: 'Teachers', value: records.teachers.length, note: `Across ${departmentSummary.value.length} departments` },
   { key: 'students', label: 'Students', value: records.students.length, note: 'Managed by class' },
   { key: 'courses', label: 'Courses', value: records.courses.length, note: 'Clear course status' },
   { key: 'resources', label: 'Lab PCs', value: studyRoomStats.value.available, note: 'Available now' },
   { key: 'users', label: 'Accounts', value: records.users.length, note: online.value ? 'Backend connected' : 'Local demo data' }
 ])
 
-const scoreBars = [
-  { label: 'Excellent', value: 67 },
-  { label: 'Good', value: 25 },
-  { label: 'Needs Work', value: 8 }
-]
+const scoreSummary = computed(() => {
+  const scores = records.scores || []
+  const total = scores.length || 1
+  const countByLevel = scores.reduce((summary, record) => {
+    const level = record.fields.level || 'Unmarked'
+    summary[level] = (summary[level] || 0) + 1
+    return summary
+  }, {})
+  return {
+    excellentRate: Math.round(((countByLevel.Excellent || 0) / total) * 100),
+    countByLevel,
+    total
+  }
+})
+
+const scoreBars = computed(() =>
+  ['Excellent', 'Good', 'Needs Work'].map((label) => ({
+    label,
+    value: Math.round(((scoreSummary.value.countByLevel[label] || 0) / scoreSummary.value.total) * 100)
+  }))
+)
+
+const departmentSummary = computed(() => {
+  const departments = records.teachers.reduce((summary, record) => {
+    const department = record.fields.department || 'Unassigned'
+    summary[department] = (summary[department] || 0) + 1
+    return summary
+  }, {})
+  return Object.entries(departments)
+    .map(([name, count]) => ({ name, count }))
+    .sort((left, right) => left.name.localeCompare(right.name))
+})
 
 const filteredRecords = computed(() => {
   const list = records[activeModule.value] || []
@@ -720,6 +753,28 @@ async function deleteRecord(id) {
 
 function replaceRecord(module, nextRecord) {
   records[module] = records[module].map((record) => (record.id === nextRecord.id ? nextRecord : record))
+}
+
+function exportRecords() {
+  const fields = activeConfig.value.fields || []
+  const header = fields.map((field) => field.label)
+  const rows = filteredRecords.value.map((record) => fields.map((field) => record.fields[field.key] ?? ''))
+  const csv = [header, ...rows].map((row) => row.map(escapeCsvValue).join(',')).join('\n')
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' })
+  const url = URL.createObjectURL(blob)
+  const link = document.createElement('a')
+  link.href = url
+  link.download = `${activeModule.value}-records.csv`
+  link.click()
+  URL.revokeObjectURL(url)
+}
+
+function escapeCsvValue(value) {
+  const text = String(value)
+  if (/[",\n]/.test(text)) {
+    return `"${text.replaceAll('"', '""')}"`
+  }
+  return text
 }
 
 function refreshStudyRooms() {
