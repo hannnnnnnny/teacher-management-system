@@ -36,6 +36,10 @@ The Reports page includes:
 - Payroll detail table for finance review.
 - CSV export for the report summary.
 
+## Contribution Test Note
+
+Recent commits use the verified project author email so GitHub can associate repository activity with the correct profile.
+
 ## Local Frontend Preview
 
 ```bash
