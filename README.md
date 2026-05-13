@@ -22,6 +22,19 @@ A teacher management system built with Java, Spring MVC, Vue and MySQL.
 - Learning resource availability
 - CSV export
 - Dashboard statistics
+- Reports and analytics
+
+## Reports
+
+The Reports page includes:
+
+- Payroll amount that needs to be paid to teachers.
+- Student-to-teacher ratio.
+- Average score overview.
+- Grade and class performance reports.
+- Teacher and course matching.
+- Payroll detail table for finance review.
+- CSV export for the report summary.
 
 ## Local Frontend Preview
 
