@@ -17,6 +17,7 @@ CREATE TABLE IF NOT EXISTS teachers (
     phone VARCHAR(30),
     email VARCHAR(100),
     department VARCHAR(100),
+    salary DECIMAL(10, 2) DEFAULT 0,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
