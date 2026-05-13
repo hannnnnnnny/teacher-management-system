@@ -98,3 +98,4 @@
 - Commit checkpoint 103: reviewed Teacher Management System quality, data coverage, UI polish, and GitHub readiness.
 - Commit checkpoint 104: reviewed Teacher Management System quality, data coverage, UI polish, and GitHub readiness.
 - Commit checkpoint 105: reviewed Teacher Management System quality, data coverage, UI polish, and GitHub readiness.
+- Reports upgrade: added payroll analytics, student-teacher ratio, grade/class performance reports, teacher-course matching, salary schema support, and reporting documentation.
