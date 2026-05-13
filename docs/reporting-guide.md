@@ -27,3 +27,6 @@ The report page summarizes:
 
 The teacher-course matching report links each teacher with assigned courses and related classes. This helps identify teachers without assigned courses and classes that may need better coverage.
 
+## Data Source
+
+The current report view uses frontend demo records and backend seed data. When a real database is connected, the same report sections can be mapped to teacher, student, class, course, score, and resource tables.
