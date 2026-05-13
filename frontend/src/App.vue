@@ -34,6 +34,9 @@
           <button v-if="activeConfig.fields" class="primary-button" @click="openCreateDialog">
             Add {{ activeConfig.short }}
           </button>
+          <button v-else-if="activeModule === 'reports'" class="primary-button" @click="exportReportSummary">
+            Export report
+          </button>
           <button v-else-if="activeModule === 'resources'" class="primary-button" @click="refreshStudyRooms">
             Refresh status
           </button>
@@ -237,6 +240,181 @@
         </section>
       </section>
 
+      <section v-else-if="activeModule === 'reports'" class="reports-page">
+        <div class="report-hero">
+          <div>
+            <p class="eyebrow">School Analytics</p>
+            <h2>Teaching, payroll, and performance reports</h2>
+            <p>
+              Review salary payout needs, student-teacher balance, grade performance,
+              class outcomes, and teacher-course assignments from one reporting page.
+            </p>
+          </div>
+          <div class="payroll-total">
+            <span>Total payroll due</span>
+            <strong>{{ formatCurrency(totalPayroll) }}</strong>
+            <small>{{ payrollRows.length }} staff records</small>
+          </div>
+        </div>
+
+        <div class="report-kpi-grid">
+          <article>
+            <span>Teacher-student ratio</span>
+            <strong>1:{{ teacherStudentRatio }}</strong>
+            <small>{{ records.teachers.length }} teachers / {{ records.students.length }} students</small>
+          </article>
+          <article>
+            <span>Average score</span>
+            <strong>{{ averageScore }}</strong>
+            <small>{{ records.scores.length }} score records</small>
+          </article>
+          <article>
+            <span>Open courses</span>
+            <strong>{{ openCourseCount }}</strong>
+            <small>{{ records.courses.length }} courses total</small>
+          </article>
+          <article>
+            <span>Class capacity</span>
+            <strong>{{ totalClassStudents }}</strong>
+            <small>{{ records.classes.length }} active classes</small>
+          </article>
+        </div>
+
+        <div class="report-grid">
+          <section class="report-card wide">
+            <div class="section-title">
+              <div>
+                <h3>Payroll by Department</h3>
+                <p>Monthly salary amount that needs to be prepared for each department.</p>
+              </div>
+              <span>{{ formatCurrency(totalPayroll) }}</span>
+            </div>
+            <div class="chart-bars">
+              <div v-for="item in payrollByDepartment" :key="item.department" class="chart-row">
+                <span>{{ item.department }}</span>
+                <div><i :style="{ width: item.percent + '%' }"></i></div>
+                <b>{{ formatCurrency(item.total) }}</b>
+              </div>
+            </div>
+          </section>
+
+          <section class="report-card">
+            <div class="section-title">
+              <div>
+                <h3>Student vs Teacher Ratio</h3>
+                <p>Current staffing balance for teaching operations.</p>
+              </div>
+            </div>
+            <div class="ratio-visual">
+              <div>
+                <strong>{{ records.students.length }}</strong>
+                <span>Students</span>
+              </div>
+              <div>
+                <strong>{{ records.teachers.length }}</strong>
+                <span>Teachers</span>
+              </div>
+            </div>
+            <p class="report-note">Each teacher currently supports about {{ teacherStudentRatio }} students.</p>
+          </section>
+
+          <section class="report-card">
+            <div class="section-title">
+              <div>
+                <h3>Grade Score Overview</h3>
+                <p>Average score grouped by grade level.</p>
+              </div>
+            </div>
+            <div class="mini-bars">
+              <div v-for="grade in gradeReports" :key="grade.grade">
+                <span>{{ grade.grade }}</span>
+                <div><i :style="{ height: grade.average + '%' }"></i></div>
+                <b>{{ grade.average }}</b>
+              </div>
+            </div>
+          </section>
+
+          <section class="report-card wide">
+            <div class="section-title">
+              <div>
+                <h3>Class Performance Report</h3>
+                <p>Class-level averages with head teacher assignment.</p>
+              </div>
+            </div>
+            <div class="report-table-wrap">
+              <table class="report-table">
+                <thead>
+                  <tr>
+                    <th>Class</th>
+                    <th>Grade</th>
+                    <th>Head Teacher</th>
+                    <th>Students</th>
+                    <th>Average Score</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="row in classReports" :key="row.className">
+                    <td>{{ row.className }}</td>
+                    <td>{{ row.grade }}</td>
+                    <td>{{ row.headTeacher }}</td>
+                    <td>{{ row.students }}</td>
+                    <td>{{ row.average }}</td>
+                    <td><span class="status-pill">{{ row.status }}</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <section class="report-card wide">
+            <div class="section-title">
+              <div>
+                <h3>Teacher and Course Matching</h3>
+                <p>Shows which teachers are assigned to courses and how performance connects back to classes.</p>
+              </div>
+            </div>
+            <div class="teacher-match-grid">
+              <article v-for="match in teacherCourseMatrix" :key="match.teacher">
+                <strong>{{ match.teacher }}</strong>
+                <span>{{ match.department }}</span>
+                <p>{{ match.courses.length ? match.courses.join(', ') : 'No course assigned' }}</p>
+                <small>{{ match.classCount }} related class{{ match.classCount === 1 ? '' : 'es' }}</small>
+              </article>
+            </div>
+          </section>
+
+          <section class="report-card wide">
+            <div class="section-title">
+              <div>
+                <h3>Payroll Detail Report</h3>
+                <p>Salary payout list for finance review.</p>
+              </div>
+            </div>
+            <div class="report-table-wrap">
+              <table class="report-table">
+                <thead>
+                  <tr>
+                    <th>Teacher</th>
+                    <th>Department</th>
+                    <th>Status</th>
+                    <th>Monthly Salary</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="row in payrollRows" :key="row.name">
+                    <td>{{ row.name }}</td>
+                    <td>{{ row.department }}</td>
+                    <td><span class="status-pill">{{ row.status }}</span></td>
+                    <td>{{ formatCurrency(row.salary) }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+        </div>
+      </section>
+
       <section v-else class="panel data-panel">
         <div class="section-title">
           <div>
@@ -311,6 +489,15 @@ const apiBase = 'http://localhost:8080/api'
 
 const modules = [
   { key: 'dashboard', label: 'Dashboard', title: 'Dashboard', short: 'Item', icon: 'D', kicker: 'Teacher Management System' },
+  {
+    key: 'reports',
+    label: 'Reports',
+    title: 'Reports & Analytics',
+    short: 'Report',
+    icon: 'R',
+    kicker: 'Analytics Center',
+    description: 'Review payroll, staffing ratios, grade performance, class reports, and teacher-course matching.'
+  },
   {
     key: 'teachers',
     label: 'Teachers',
@@ -499,6 +686,17 @@ const fallbackData = {
   ]
 }
 
+const salaryByDepartment = {
+  'Language Arts': 6800,
+  Mathematics: 7200,
+  English: 6600,
+  Science: 7400,
+  'Computer Science': 7800,
+  'Physical Education': 6200,
+  Arts: 6100,
+  History: 6400
+}
+
 const activeModule = ref('dashboard')
 const keyword = ref('')
 const dialogOpen = ref(false)
@@ -517,6 +715,9 @@ const totalPeople = computed(() => (records.teachers?.length || 0) + (records.st
 const searchPlaceholder = computed(() => {
   if (activeModule.value === 'resources') {
     return 'Search PC, building, level, or workstation type...'
+  }
+  if (activeModule.value === 'reports') {
+    return 'Search reports, teachers, grades, or departments...'
   }
   return 'Search names, courses, classes...'
 })
@@ -561,6 +762,97 @@ const departmentSummary = computed(() => {
     .map(([name, count]) => ({ name, count }))
     .sort((left, right) => left.name.localeCompare(right.name))
 })
+
+const payrollRows = computed(() =>
+  records.teachers.map((record) => ({
+    name: record.fields.name,
+    department: record.fields.department,
+    status: record.fields.status,
+    salary: salaryByDepartment[record.fields.department] || 6000
+  }))
+)
+
+const totalPayroll = computed(() => payrollRows.value.reduce((total, row) => total + row.salary, 0))
+
+const payrollByDepartment = computed(() => {
+  const totals = payrollRows.value.reduce((summary, row) => {
+    summary[row.department] = (summary[row.department] || 0) + row.salary
+    return summary
+  }, {})
+  const max = Math.max(...Object.values(totals), 1)
+  return Object.entries(totals)
+    .map(([department, total]) => ({
+      department,
+      total,
+      percent: Math.round((total / max) * 100)
+    }))
+    .sort((left, right) => right.total - left.total)
+})
+
+const teacherStudentRatio = computed(() => {
+  if (!records.teachers.length) {
+    return 0
+  }
+  return Math.round(records.students.length / records.teachers.length)
+})
+
+const averageScore = computed(() => {
+  const values = records.scores.map((record) => Number(record.fields.score)).filter((score) => !Number.isNaN(score))
+  if (!values.length) {
+    return 0
+  }
+  return Math.round(values.reduce((sum, score) => sum + score, 0) / values.length)
+})
+
+const openCourseCount = computed(() => records.courses.filter((record) => record.fields.status === 'Open').length)
+
+const totalClassStudents = computed(() =>
+  records.classes.reduce((total, record) => total + Number(record.fields.students || 0), 0)
+)
+
+const classReports = computed(() =>
+  records.classes.map((record, index) => {
+    const scoreRecords = records.scores.filter((score, scoreIndex) => scoreIndex % records.classes.length === index)
+    const average = averageFromRecords(scoreRecords)
+    return {
+      className: record.fields.name,
+      grade: record.fields.grade,
+      headTeacher: record.fields.headTeacher,
+      students: record.fields.students,
+      average,
+      status: average >= 90 ? 'Excellent' : average >= 84 ? 'Good' : 'Review'
+    }
+  })
+)
+
+const gradeReports = computed(() => {
+  const groups = classReports.value.reduce((summary, row) => {
+    if (!summary[row.grade]) {
+      summary[row.grade] = []
+    }
+    summary[row.grade].push(row.average)
+    return summary
+  }, {})
+  return Object.entries(groups).map(([grade, scores]) => ({
+    grade,
+    average: Math.round(scores.reduce((sum, score) => sum + score, 0) / scores.length)
+  }))
+})
+
+const teacherCourseMatrix = computed(() =>
+  records.teachers.map((teacher) => {
+    const courses = records.courses
+      .filter((course) => course.fields.teacher === teacher.fields.name)
+      .map((course) => course.fields.name)
+    const classCount = records.classes.filter((item) => item.fields.headTeacher === teacher.fields.name).length
+    return {
+      teacher: teacher.fields.name,
+      department: teacher.fields.department,
+      courses,
+      classCount
+    }
+  })
+)
 
 const filteredRecords = computed(() => {
   const list = records[activeModule.value] || []
@@ -769,12 +1061,51 @@ function exportRecords() {
   URL.revokeObjectURL(url)
 }
 
+function exportReportSummary() {
+  const rows = [
+    ['Metric', 'Value'],
+    ['Total payroll due', formatCurrency(totalPayroll.value)],
+    ['Teacher-student ratio', `1:${teacherStudentRatio.value}`],
+    ['Average score', averageScore.value],
+    ['Open courses', openCourseCount.value],
+    ['Class capacity', totalClassStudents.value]
+  ]
+  downloadCsv('reports-summary.csv', rows)
+}
+
+function downloadCsv(filename, rows) {
+  const csv = rows.map((row) => row.map(escapeCsvValue).join(',')).join('\n')
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' })
+  const url = URL.createObjectURL(blob)
+  const link = document.createElement('a')
+  link.href = url
+  link.download = filename
+  link.click()
+  URL.revokeObjectURL(url)
+}
+
 function escapeCsvValue(value) {
   const text = String(value)
   if (/[",\n]/.test(text)) {
     return `"${text.replaceAll('"', '""')}"`
   }
   return text
+}
+
+function averageFromRecords(scoreRecords) {
+  if (!scoreRecords.length) {
+    return averageScore.value
+  }
+  const total = scoreRecords.reduce((sum, record) => sum + Number(record.fields.score || 0), 0)
+  return Math.round(total / scoreRecords.length)
+}
+
+function formatCurrency(value) {
+  return new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+    maximumFractionDigits: 0
+  }).format(value)
 }
 
 function refreshStudyRooms() {
