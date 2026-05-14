@@ -1,46 +1,52 @@
 # Teacher Management System
 
-A teacher management system built with Java, Spring MVC, Vue and MySQL.
+A full-stack teacher management demo for school administration workflows. It combines a Spring Boot backend, MySQL schema, and a Vue 3 admin dashboard for managing teachers, students, courses, classes, scores, accounts, reports, and learning resources.
+
+![Teacher management dashboard preview](docs/preview-dashboard.png)
+
+## What It Does
+
+This project gives administrators one place to manage daily teaching operations. The frontend includes a polished dashboard, searchable data modules, add/edit/delete dialogs, CSV export, report analytics, and a learning resource availability page. The backend provides a Spring Boot REST foundation for connecting these modules to persistent data.
+
+## Preview
+
+The opening screenshot shows the dashboard with key records, daily tasks, score distribution, department coverage, and recent activity.
+
+### Reports and Analytics
+
+The reports page visualizes payroll needs, teacher-student ratio, average score, course status, class capacity, department payroll, grade performance, and teacher-course matching.
+
+![Reports preview](docs/preview-reports.png)
+
+### Learning Resource Status
+
+The resources page tracks computer lab availability with filters for location, level, and status.
+
+![Learning resource status preview](docs/preview-lab-pcs.png)
+
+## Core Features
+
+- Dashboard summary for teachers, students, courses, lab PCs, and accounts.
+- CRUD-style management tables with search, add, edit, delete, and empty states.
+- Teacher, student, course, class, score, account, and resource modules.
+- CSV export for management tables and report summaries.
+- Payroll, staffing ratio, grade, class, and teacher-course analytics.
+- Learning resource availability view with live-style status cards.
+- Spring Boot backend structure with REST controllers, service layer, and models.
+- MySQL schema for users, teachers, students, courses, scores, and resources.
 
 ## Tech Stack
 
-- Java
-- Spring Boot
-- Spring MVC
-- Vue
-- MySQL
-- Maven
+| Layer | Tools |
+| --- | --- |
+| Frontend | Vue 3, Vite, Element Plus, Axios |
+| Backend | Java 17, Spring Boot, Spring MVC, Maven |
+| Database | MySQL |
+| Styling | Custom responsive CSS |
 
-## Modules
+## Run Locally
 
-- Teacher management
-- Student management
-- Course management
-- Class management
-- Score management
-- Account permissions
-- Learning resource availability
-- CSV export
-- Dashboard statistics
-- Reports and analytics
-
-## Reports
-
-The Reports page includes:
-
-- Payroll amount that needs to be paid to teachers.
-- Student-to-teacher ratio.
-- Average score overview.
-- Grade and class performance reports.
-- Teacher and course matching.
-- Payroll detail table for finance review.
-- CSV export for the report summary.
-
-## Contribution Test Note
-
-Recent commits use the verified project author email so GitHub can associate repository activity with the correct profile.
-
-## Local Frontend Preview
+### Frontend
 
 ```bash
 cd frontend
@@ -50,29 +56,50 @@ npm run dev
 
 Open the Vite URL shown in the terminal, usually `http://localhost:5173`.
 
-## Current Improvements
+### Backend
 
-- Richer demo data for teachers, students, courses, classes, scores, accounts, and resources.
-- Dynamic dashboard summaries for departments and score distribution.
-- Searchable management tables with add, edit, delete, and CSV export.
-- Empty-state handling for filtered tables.
-- Pink professional admin layout for a polished project presentation.
+```bash
+cd backend
+mvn spring-boot:run
+```
+
+The frontend can still show local demo data if the backend is not running.
+
+### Database
+
+Import the schema before connecting the backend to MySQL:
+
+```bash
+mysql -u root -p < database/schema.sql
+```
+
+## Documentation
+
+- [Reporting guide](docs/reporting-guide.md)
+- [Optimization log](docs/optimization-log.md)
 
 ## Project Structure
 
 ```text
 teacher-management-system/
 |-- backend/
-|-- frontend/
+|   |-- pom.xml
+|   `-- src/main/java/com/example/teachermanagement/
 |-- database/
-|-- .gitignore
+|   `-- schema.sql
+|-- docs/
+|   |-- preview-dashboard.png
+|   |-- preview-reports.png
+|   |-- preview-lab-pcs.png
+|   |-- reporting-guide.md
+|   `-- optimization-log.md
+|-- frontend/
+|   |-- src/
+|   |-- package.json
+|   `-- vite.config.js
 `-- README.md
 ```
 
-## Development Plan
+## Demo Note
 
-1. Build database tables.
-2. Create Spring MVC REST APIs.
-3. Create Vue pages and call backend APIs.
-4. Add login and role permissions.
-5. Deploy or publish the final project.
+This is a generic school administration demo project. The sample data and preview screenshots are for portfolio and development presentation only.
